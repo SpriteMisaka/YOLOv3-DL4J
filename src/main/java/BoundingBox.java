@@ -30,7 +30,6 @@ public class BoundingBox extends Rect implements Comparable<BoundingBox> {
         return Double.compare(this.confidence, other.confidence);
     }
     /**
-     *
      * 计算并返回两个边界框的交并比。
      */
     public static double getIOU(BoundingBox box1, BoundingBox box2) {
