@@ -11,6 +11,10 @@ public class Config {
      */
     public static final List<String> CLASSES;
     /**
+     * 模型文件名称。
+     */
+    public static final String MODEL_NAME = BUNDLE.getString("model_name");
+    /**
      * 交并比阈值。
      */
     public static final double IOU_THRESHOLD =
@@ -43,7 +47,7 @@ public class Config {
     static {
         // 载入类别。
         {
-            File file = new File("src\\main\\resources\\" + BUNDLE.getString("classes_path"));
+            File file = new File("src\\main\\resources\\" + BUNDLE.getString("classes_name"));
             BufferedReader reader;
             ArrayList<String> lines = new ArrayList<>();
             try {

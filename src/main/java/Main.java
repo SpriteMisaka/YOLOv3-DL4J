@@ -47,8 +47,8 @@ public class Main {
     /**
      * 载入模型。
      */
-    private static ComputationGraph loadModel(String modelName) throws IOException {
-        String modelPath = new ClassPathResource(modelName).getFile().getPath();
+    private static ComputationGraph loadModel() throws IOException {
+        String modelPath = new ClassPathResource(Config.MODEL_NAME).getFile().getPath();
         ComputationGraph model = null;
         try { model = KerasModelImport.importKerasModelAndWeights(modelPath); } catch (Exception ignored) { }
         return model;
@@ -106,7 +106,7 @@ public class Main {
             // 绘制边界框。
             Imgproc.rectangle(img, obj.tl(), obj.br(), new Scalar(255, 0, 0), 2);
             Imgproc.putText(img, Config.CLASSES.get(obj.predictedClass) + String.format(" %.2f", obj.confidence),
-                    obj.tl(), Core.FONT_HERSHEY_PLAIN, 1.0, new Scalar(255, 0, 0), 2);
+                    obj.tl(), Imgproc.FONT_HERSHEY_PLAIN, 1.0, new Scalar(255, 0, 0), 2);
         }
         // 显示图像。
         HighGui.imshow("Image", img);
@@ -147,7 +147,7 @@ public class Main {
                             // 计算物体所属类别。
                             INDArray softmax = reshapedOutput
                                     .get(NDArrayIndex.point(0), NDArrayIndex.point(box), NDArrayIndex.interval(5, 5 + Config.CLASSES.size()), NDArrayIndex.point(y), NDArrayIndex.point(x)).dup();
-                            int predictedClass = softmax.ravel().argMax(new int[0]).getInt(0);
+                            int predictedClass = softmax.ravel().argMax().getInt(0);
                             // 添加边界框至候选框。
                             out.add(new BoundingBox(new Point(x1, y1), new Point(x2, y2), confidence, predictedClass));
                         }
@@ -165,8 +165,7 @@ public class Main {
         String imgPath = "src\\main\\resources\\example.jpg";
         INDArray input = loadInput(imgPath);
         // 读取模型。
-        String modelName = "model.h5";
-        ComputationGraph model = loadModel(modelName);
+        ComputationGraph model = loadModel();
 
         if (model != null) {
             // 得到预测结果。
